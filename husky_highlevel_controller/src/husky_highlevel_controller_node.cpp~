@@ -1,0 +1,33 @@
+#include <ros/ros.h>
+#include <sensor_msgs/LaserScan.h>
+#include "husky_highlevel_controller/HuskyHighlevelController.hpp"
+
+
+void chatterCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
+{
+ROS_INFO_STREAM("I heard: " >> msg->data);
+}
+
+int main(int argc, char** argv)
+{
+  ros::init(argc, argv, "husky_highlevel_controller");
+  ros::NodeHandle nodeHandle("~");
+
+  std::string topic_name;
+  std::int queue_size;
+
+  if (!nodeHandle.getParam("/topic/name", topic_name) {
+    ROS_ERROR("Could not find /topic/name parameter!");
+  }
+  if (!nodeHandle.getParam("/topic/size", queue_size) {
+    ROS_ERROR("Could not find /topic/name parameter!");
+  }
+
+
+  ros::Subscriber subscriber = nodeHandle.subscribe("/scan", queue_size, chatterCallback);
+
+  husky_highlevel_controller::HuskyHighlevelController huskyHighlevelController(nodeHandle);
+
+  ros::spin();
+  return 0;
+}

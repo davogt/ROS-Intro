@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="world" default="robocup09_spl_field"/>
+
+	<include file="$(find gazebo_ros)/launch/husky_empty_world.launch">
+		<arg name="world_name" value="worlds/$(arg world).world"/>
+	</include>
+	<node name="teleop_cmd" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py">
+	</node>
+</launch>
