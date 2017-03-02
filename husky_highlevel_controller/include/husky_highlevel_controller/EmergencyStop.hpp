@@ -25,6 +25,8 @@ class EmergencyStop {
   void callback(const sensor_msgs::ImuConstPtr& msg);
 
   int loadParams();
+
+  void enable();
   // Constructor:
   EmergencyStop(ros::NodeHandle& nodeHandle);
   // Destructor:

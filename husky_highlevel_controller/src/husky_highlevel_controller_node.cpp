@@ -7,9 +7,6 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "husky_highlevel_controller");
   ros::NodeHandle nodeHandle("~");
-  ros::NodeHandle node;
-  std::string topic_name;
-  int queue_size;
 
   husky_highlevel_controller::HuskyHighlevelController huskyHighlevelController(nodeHandle);
 

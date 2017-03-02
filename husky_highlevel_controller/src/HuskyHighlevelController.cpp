@@ -43,7 +43,7 @@ void HuskyHighlevelController::callback(
 
   init_marker();
 
-  ROS_INFO("Minimum measured distance is: %f", min_el(range, min, max, size));
+  //ROS_INFO("Minimum measured distance is: %f", min_el(range, min, max, size));
 
   publisher_.publish(
       get_pos(range, min, max, size, angle_min, angle_max, increment));
