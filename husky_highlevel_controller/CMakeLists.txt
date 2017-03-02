@@ -8,6 +8,7 @@ add_definitions(--std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
+  visualization_msgs
 )
 
 ###################################
@@ -46,9 +47,16 @@ add_executable(${PROJECT_NAME}
   src/HuskyHighlevelController.cpp
 )
 
+add_executable(emergency_stop
+  src/emergency_stop_node.cpp
+  src/EmergencyStop.cpp
+)
+
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
 
-
+target_link_libraries(emergency_stop
+  ${catkin_LIBRARIES}
+)
