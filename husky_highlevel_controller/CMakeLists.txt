@@ -8,6 +8,7 @@ add_definitions(--std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
+  std_srvs
   visualization_msgs
 )
 
@@ -27,6 +28,8 @@ catkin_package(
   CATKIN_DEPENDS 
     roscpp
     sensor_msgs
+    std_srvs
+    visualization_msgs
 #  DEPENDS 
 )
 

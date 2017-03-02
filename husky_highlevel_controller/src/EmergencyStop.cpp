@@ -24,11 +24,9 @@ EmergencyStop::EmergencyStop(ros::NodeHandle& nodeHandle)
     ROS_ERROR("Could not find trigger parameter!");
     ros::requestShutdown();
   }
-
-  ros::ServiceClient emergency_client = nodeHandle
-        .serviceClient<std_srvs::SetBool>(
+  std::cout << trigger_topic_name;
+  emergency_client = nodeHandle.serviceClient<std_srvs::SetBool>(
         "/husky_highlevel_controller/EmergencyStop");
-
 
   try {
     if (trigger_topic_name == "imu/data")
@@ -46,6 +44,8 @@ EmergencyStop::EmergencyStop(ros::NodeHandle& nodeHandle)
     ROS_ERROR(
         "Could not resolve ROS trigger topic! Msg type is not valid to trigger Emergency Stop.");
   }
+
+  enable();
 }
 
 int EmergencyStop::loadParams() {
@@ -56,19 +56,27 @@ int EmergencyStop::loadParams() {
 }
 
 void EmergencyStop::callService() {
-service.request.data = hazard_detect;
+service.request.data = !hazard_detect;
   if (emergency_client.call(service)) {
-    ROS_INFO("A hazard for the Robot was detected! Stopping all actuators..");
+    if (hazard_detect){
+      ROS_INFO("A hazard for the Robot was detected! Stopping all actuators..");
+    }
+    else ROS_INFO("I'll be roving on");
   }
   else {
     ROS_ERROR("Failed to call service \"Emergency Stop\"!");
   }
 }
 
+void EmergencyStop::enable(){
+  hazard_detect = false;
+  callService();
+  ROS_INFO("Robot has been enabled. start driving..");
+}
+
 void EmergencyStop::callback(const std_msgs::Float64ConstPtr& msg) {
   if (msg->data < clearance){
     hazard_detect = true;
-
   }
   else hazard_detect = false;
 
@@ -76,7 +84,11 @@ void EmergencyStop::callback(const std_msgs::Float64ConstPtr& msg) {
 }
 
 void EmergencyStop::callback(const sensor_msgs::ImuConstPtr& msg){
-
+  if (msg->linear_acceleration.z > 15.0){
+    hazard_detect = true;
+    callService();
+  }
+  else hazard_detect = false;
  }
 
 EmergencyStop::~EmergencyStop() {
