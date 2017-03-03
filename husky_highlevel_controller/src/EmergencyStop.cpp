@@ -10,7 +10,7 @@
 #include <ros/ros.h>
 #include "husky_highlevel_controller/EmergencyStop.hpp"
 
-#include <std_msgs/Float64.h>
+#include <std_msgs/Float32.h>
 
 #include <sensor_msgs/Imu.h>
 
@@ -35,7 +35,7 @@ EmergencyStop::EmergencyStop(ros::NodeHandle& nodeHandle)
                                         &EmergencyStop::callback, this);
     }
     else if (trigger_topic_name == "husky_highlevel_controller/min_dst"){
-      subscriber_ = nodeHandle_.subscribe<const std_msgs::Float64ConstPtr&>("/" + trigger_topic_name, 3,
+      subscriber_ = nodeHandle_.subscribe<const std_msgs::Float32ConstPtr&>("/" + trigger_topic_name, 3,
                                               &EmergencyStop::callback, this);
     }
     else ROS_WARN("No valid hazard avoidance have been set. Robot will not move..");
@@ -74,7 +74,7 @@ void EmergencyStop::enable(){
   ROS_INFO("Robot has been enabled. start driving..");
 }
 
-void EmergencyStop::callback(const std_msgs::Float64ConstPtr& msg) {
+void EmergencyStop::callback(const std_msgs::Float32ConstPtr& msg) {
   if (msg->data < clearance){
     hazard_detect = true;
   }

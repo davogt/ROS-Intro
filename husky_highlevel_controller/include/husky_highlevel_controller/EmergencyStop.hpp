@@ -9,7 +9,7 @@
 
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/Float64.h>
+#include <std_msgs/Float32.h>
 
 #include <sensor_msgs/Imu.h>
 
@@ -21,7 +21,7 @@ class EmergencyStop {
  public:
   void callService();
 
-  void callback(const std_msgs::Float64ConstPtr& msg);
+  void callback(const std_msgs::Float32ConstPtr& msg);
   void callback(const sensor_msgs::ImuConstPtr& msg);
 
   int loadParams();
@@ -43,7 +43,7 @@ class EmergencyStop {
   bool hazard_detect = true;
   bool robot_state = false;
 
-  double clearance = 1;
+  float clearance = 1.0;
 
   std_srvs::SetBool service;
 };
