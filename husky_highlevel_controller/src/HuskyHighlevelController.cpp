@@ -2,6 +2,7 @@
 #include <ros/ros.h>
 
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float32.h>
 #include <sensor_msgs/LaserScan.h>
 #include <geometry_msgs/Twist.h>
 #include <visualization_msgs/Marker.h>
@@ -23,6 +24,7 @@ HuskyHighlevelController::HuskyHighlevelController(ros::NodeHandle& nodeHandle)
                                       this);
   emergency_stop = nodeHandle.advertiseService("EmergencyStop", &HuskyHighlevelController::stopRobot, this);
   publisher_ = nodeHandle.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+  dst_pub = nodeHandle.advertise<std_msgs::Float32>("min_dst", 1);
   vis_pub = nodeHandle.advertise<visualization_msgs::Marker>(
       "/visualization_marker", 10);
 }
@@ -43,8 +45,9 @@ void HuskyHighlevelController::callback(
 
   init_marker();
 
-  //ROS_INFO("Minimum measured distance is: %f", min_el(range, min, max, size));
-
+  min_dst = min_el(range, min, max, size);
+  //ROS_INFO("Minimum measured distance is: %f", min_dst);
+  dst_pub.publish(min_dst);
   publisher_.publish(
       get_pos(range, min, max, size, angle_min, angle_max, increment));
 

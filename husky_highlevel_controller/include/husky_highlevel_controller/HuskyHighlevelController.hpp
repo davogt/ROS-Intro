@@ -2,6 +2,7 @@
 
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float32.h>
 #include <sensor_msgs/LaserScan.h>
 #include <geometry_msgs/Twist.h>
 #include <visualization_msgs/Marker.h>
@@ -33,6 +34,7 @@ class HuskyHighlevelController {
 
  protected:
   ros::Subscriber subscriber_;
+  ros::Publisher dst_pub;
   ros::Publisher publisher_;
   ros::Publisher vis_pub;
   ros::ServiceServer emergency_stop;
@@ -49,6 +51,7 @@ class HuskyHighlevelController {
   bool stop_robot = true;        // Stops the robot if == true
   bool robot_state = false;  // Returns true if robot is moving, false if all velocities == 0
   geometry_msgs::Twist cmd_vel;
+  float min_dst;
   visualization_msgs::Marker marker;
 };
 
